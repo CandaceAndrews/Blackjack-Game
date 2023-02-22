@@ -111,11 +111,10 @@ class Game():
         """
         choice = input("--> Hit or Stand? ").lower()
 
-        while self.player.get_hand_value() < 21:
-            if choice == "hit":
-                self.give_card(self.player)
-                self.player.view_cards()
-                self.player.get_hand_value()
+        if choice == "hit":
+            self.give_card(self.player)
+            self.player.view_cards()
+            self.player.get_hand_value()
 
     def give_card(self, person_playing):
         """give one card
