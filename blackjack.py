@@ -1,113 +1,129 @@
-SUITS = ['♥️', '♣️', '♠️', '♦️']
+import random
+
+SUITS = ['♥', '♣️', '♠️', '♦']
 RANKS = [2, 3, 4, 5, 6, 7, 8, 9, 10, 'J', 'Q', 'K', 'A']
 
 
 class Card:
-    def __init__(self, suit='🐕', rank=20):
+    """store suit and rank for each card
+    """
+
+    def __init__(self, suit, rank):
         self.suit = suit
         self.rank = rank
 
     def __str__(self):
-        return f'{self.rank} of {self.suit}'
-
-    def get_rank(self):
-        return self.rank
+        return f"{self.suit}{self.rank}"
 
 
 class Deck:
+    """create deck of cards and shuffle
+    """
 
     def __init__(self):
         self.cards = []
 
     def add_cards(self):
-        for suit in SUITS:
-            for rank in RANKS:
-                new_card = Card(suit, rank)
-                self.cards.append(new_card)
+        for symbol in SUITS:
+            for number in RANKS:
+                self.cards.append(Card(symbol, number))
+
+    def shuffle(self):
+        random.shuffle(self.cards)
 
 
 class Player:
+    """name input and view player hand
+    """
+
     def __init__(self):
         self.name = input("What is your name? ")
         self.hand = []
 
     def __str__(self):
-        return f'{self.name} is the player'
+        return f"{self.name} is the player"
 
-    def turn(self):
-        '''Player decides how many times to hit before staying'''
-        pass
+    def view_cards(self):
+        for card in self.hand:
+            print(card)
 
 
 class Dealer(Player):
     # inherits from Player
-    # everything is the same as player, unless you write it differently in here
+    """name output, cards in hand
+    """
+
     def __init__(self):
         self.name = "Dealer"
-        # overrides the code asking for player's name
         self.hand = []
 
     def __str__(self):
-        # when we write variables and methods with the same name as the parent class,
-        # they override the code from the parent class (Player)
-        return f'{self.name} is the dealer'
+        # when we write cariables and methods with the same
+        # as the parent class, they override the code from
+        # the parent class (Player)
+        return f"{self.name} is the dealer"
 
     def turn(self):
-        '''unlike player, dealer follows house rules and stays at 17,
-        no choice'''
+        # unlike player, dealer follows the house rules
+        pass
 
     def end_game(self):
         pass
 
 
-class Game:
+class Game():
+    """main flow of the game
+    """
+    print("Welcome to Blackjack!\n")
 
-    def __init__(self, deck=None):
-        # can set default values in the signature line, like 'deck=None'
+    def __init__(self):
         self.player = Player()
-        # the value of self.player is an instance of the class Player
         self.dealer = Dealer()
-        self.deck = deck
-        # self.setup()
-        # calling the Game class's setup function
+        self.setup()
 
     def setup(self):
         self.deck = Deck()
-        # calls line 13, creates a deck
         self.deck.add_cards()
-        # calls line 16, adds cards to the deck
 
-    def money_available(participants):
-        pot = 0
-        for participant in participants:
-            pot += input(int(('What is your bet')))
-        return pot
+    def player_turn(self):
+        """decide if player hits or stands
+        """
+        decided_action = input("Hit or Stand? ").lower()
+        if decided_action == "hit":
+            drawn_card = self.deck.cards.pop()
+            self.player.hand.append(drawn_card)
+            self.player.view_cards()
+
+    def deal(self):
+        self.setup()
+        self.deck.shuffle()
+
+        # print(new_game.player)
+        print()
+
+        card = self.deck.cards.pop()
+        self.player.hand.append(card)
+
+        card = self.deck.cards.pop()
+        self.player.hand.append(card)
+
+        print(f"{self.player.name}'s hand:")
+        self.player.view_cards()
+
+        # print(new_game.dealer)
+        print()
+
+        card = self.deck.cards.pop()
+        self.dealer.hand.append(card)
+
+        card = self.deck.cards.pop()
+        self.dealer.hand.append(card)
+
+        print("Dealer's hand:")
+        self.dealer.view_cards()
 
 
+# GAME START
 new_game = Game()
-# calls the Game class's init method in line 54
-new_game.setup()
-print(new_game.player)
-# calls Player __str__ method
-print(new_game.player.hand)
-print(new_game.dealer)
-# calls Dealer __str__ method
-print(new_game.dealer.hand)
-
-# for card in new_game.deck.cards:
-#     print(card)
-
-# pot = Game.money_available(['Gerardo', 'Candace'])
-# created the game and the deck with cards
-
-# TODO
-# ✅ make a player, like we did with Deck
-# ✅ make a dealer, also like we did with Deck
-# shuffle deck
-# play
-# deal cards
-# player's turn (hit/stay)
-# calculate score from cards in hand
-# dealer's turn
-# calculate score from cards in hand
-# who won/lost/busted/21
+new_game.deal()
+new_game.player_turn()

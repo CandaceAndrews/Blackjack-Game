@@ -34,3 +34,16 @@ Dealer
 Game  
 - winner/loser
 - in progress/finished
+_______________________________________________________
+
+# TODO
+# ✅ make a player, like we did with Deck
+# ✅ make a dealer, also like we did with Deck
+# ✅ shuffle deck
+# play
+# ✅ deal cards
+# player's turn (hit/stay)
+# calculate score from cards in hand
+# dealer's turn
+# calculate score from cards in hand
+# who won/lost/busted/21
