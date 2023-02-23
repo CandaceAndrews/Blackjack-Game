@@ -26,16 +26,16 @@ class Deck:
         self.shuffle()
 
     def add_cards(self):
-        for symbol in SUITS:
-            for number in RANKS:
-                self.cards.append(Card(symbol, number))
+        for suit in SUITS:
+            for rank in RANKS:
+                self.cards.append(Card(suit, rank))
 
     def shuffle(self):
         random.shuffle(self.cards)
 
 
 class Player:
-    """name input and view player hand
+    """name input, view hand and value of their cards
     """
 
     def __init__(self):
@@ -46,10 +46,14 @@ class Player:
         return f"{self.name} is the player"
 
     def view_cards(self):
+        """view the cards in hand
+        """
         for card in self.hand:
             print(card)
 
     def get_hand_value(self):
+        """add total value of cards in hand and display
+        """
         hand_value = 0
         aces = 0
         for card in self.hand:
@@ -64,8 +68,8 @@ class Player:
                 hand_value += 1
             else:
                 hand_value += 11
-            return hand_value
         print(f"Value of {self.name}'s hand: {hand_value}")
+        return hand_value
 
 
 class Dealer(Player):
@@ -78,18 +82,7 @@ class Dealer(Player):
         self.hand = []
 
     def __str__(self):
-        # when we write cariables and methods with the same
-        # as the parent class, they override the code from
-        # the parent class (Player)
         return f"{self.name} is the dealer"
-
-    def turn(self):
-        # unlike player, dealer follows the house rules
-        # can't go over 17
-        pass
-
-    def end_game(self):
-        pass
 
 
 class Game():
@@ -107,11 +100,34 @@ class Game():
     def player_turn(self):
         """decide if player hits or stands
         """
-        choice = input("--> Hit or Stand? ").lower()
-        if choice == "hit":
-            self.give_card(self.player)
-            self.player.view_cards()
-            self.player.get_hand_value()
+        while True:
+            choice = input("--> Hit or Stand? ").lower()
+            if choice == "hit":
+                self.give_card(self.player)
+                self.player.view_cards()
+                hand_value = self.player.get_hand_value()
+                if hand_value > 21:
+                    print(
+                        f"--> {self.player.name} has busted! Dealer wins! <--")
+                    self.end_game()
+                    break
+            elif choice == "stand":
+                self.dealer_turn()
+                break
+            else:
+                print("--> Invalid input. Please enter 'hit' or 'stand' <--")
+                continue
+
+    def dealer_turn(self):
+        """dealer follows house rules to draw cards
+        """
+        print("\nDealer's turn...")
+        self.dealer.view_cards()
+        while self.dealer.get_hand_value() < 17:
+            self.give_card(self.dealer)
+            self.dealer.view_cards()
+            self.dealer.get_hand_value()
+        self.end_game()
 
     def give_card(self, person_playing):
         """give one card
@@ -141,6 +157,11 @@ class Game():
         self.dealer.view_cards()
         self.dealer.get_hand_value()
         print()
+
+    def end_game(self):
+        """determine the winner and end the game
+        """
+        pass
 
 
 # GAME START
