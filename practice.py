@@ -41,3 +41,28 @@ self.deck.shuffle()
 
 while len(player.hand) > 2 and len(dealer.hand) < 2:
     
+
+
+
+
+
+if self.dealer.calculate() <21:
+    if self.dealer.hand.append(card)
+    print('dealer hand is: ')
+    self.dealer.view_cards()
+elif self.dealer.calculate() > 21:
+    print("dealer bust")
+    return self.dealer.calculate()
+
+
+player_turn(self, stay)
+
+
+def turn_take(self):
+    p_score = 0
+    d_score = 0
+    stay = False
+    while p_score < 21 and stay == False:
+    p_score = self.player_turn()
+    while d_score < 17:
+        d_score = self.dealer_turn()

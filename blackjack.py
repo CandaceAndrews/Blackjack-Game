@@ -22,6 +22,8 @@ class Deck:
 
     def __init__(self):
         self.cards = []
+        self.add_cards()
+        self.shuffle()
 
     def add_cards(self):
         for symbol in SUITS:
@@ -98,24 +100,18 @@ class Game():
     def __init__(self):
         self.player = Player()
         self.dealer = Dealer()
-        self.setup()
-
-    def setup(self):
-        """make cards for game
-        """
         self.deck = Deck()
-        self.deck.add_cards()
+        self.deal()
+        self.player_turn()
 
     def player_turn(self):
         """decide if player hits or stands
         """
         choice = input("--> Hit or Stand? ").lower()
-
-        while self.player.get_hand_value() < 21:
-            if choice == "hit":
-                self.give_card(self.player)
-                self.player.view_cards()
-                self.player.get_hand_value()
+        if choice == "hit":
+            self.give_card(self.player)
+            self.player.view_cards()
+            self.player.get_hand_value()
 
     def give_card(self, person_playing):
         """give one card
@@ -126,29 +122,26 @@ class Game():
     def deal(self):
         """give out cards and print game info
         """
-        self.setup()
-        self.deck.shuffle()
-
-        # two cards for player
-        print()
+        # two cards for player ---
         self.give_card(self.player)
         self.give_card(self.player)
 
+        # print player info ---
         print(f"{self.player.name}'s hand:")
         self.player.view_cards()
         self.player.get_hand_value()
-
-        # two cards for dealer
         print()
+
+        # two cards for dealer ---
         self.give_card(self.dealer)
         self.give_card(self.dealer)
 
+        # print dealer info ---
         print("Dealer's hand:")
         self.dealer.view_cards()
         self.dealer.get_hand_value()
+        print()
 
 
 # GAME START
 new_game = Game()
-new_game.deal()
-new_game.player_turn()

@@ -110,7 +110,6 @@ class Game():
         """decide if player hits or stands
         """
         choice = input("--> Hit or Stand? ").lower()
-
         if choice == "hit":
             self.give_card(self.player)
             self.player.view_cards()
