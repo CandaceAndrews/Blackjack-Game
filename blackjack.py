@@ -52,7 +52,7 @@ class Player:
             print(card)
 
     def get_hand_value(self):
-        """add total value of cards in hand and display
+        """add total value of cards in hand
         """
         hand_value = 0
         aces = 0
@@ -68,8 +68,12 @@ class Player:
                 hand_value += 1
             else:
                 hand_value += 11
-        print(f"Value of {self.name}'s hand: {hand_value}")
         return hand_value
+
+    def view_hand_value(self):
+        """display total value of hand
+        """
+        print(f"Value of {self.name}'s hand: {self.get_hand_value()}")
 
 
 class Dealer(Player):
@@ -105,6 +109,7 @@ class Game():
             if choice == "hit":
                 self.give_card(self.player)
                 self.player.view_cards()
+                self.player.view_hand_value()
                 hand_value = self.player.get_hand_value()
                 if hand_value > 21:
                     print(
@@ -122,11 +127,11 @@ class Game():
         """dealer follows house rules to draw cards
         """
         print("\nDealer's turn...")
-        self.dealer.view_cards()
+        # self.dealer.view_cards()
         while self.dealer.get_hand_value() < 17:
             self.give_card(self.dealer)
-            self.dealer.view_cards()
-            self.dealer.get_hand_value()
+        self.dealer.view_cards()
+        self.dealer.view_hand_value()
         self.end_game()
 
     def give_card(self, person_playing):
@@ -145,7 +150,7 @@ class Game():
         # print player info ---
         print(f"{self.player.name}'s hand:")
         self.player.view_cards()
-        self.player.get_hand_value()
+        self.player.view_hand_value()
         print()
 
         # two cards for dealer ---
@@ -155,13 +160,31 @@ class Game():
         # print dealer info ---
         print("Dealer's hand:")
         self.dealer.view_cards()
-        self.dealer.get_hand_value()
+        self.dealer.view_hand_value()
         print()
 
     def end_game(self):
         """determine the winner and end the game
         """
-        pass
+        player_final_score = self.player.get_hand_value()
+        dealer_final_score = self.dealer.get_hand_value()
+
+        if player_final_score > 21:
+            print("--> Dealer wins! <--")
+        elif dealer_final_score > 21:
+            print(f"--> {self.player.name} wins!")
+        elif player_final_score > dealer_final_score:
+            print(f"--> {self.player.name} wins!")
+        elif player_final_score < dealer_final_score:
+            print("--> Dealer wins! <--")
+        else:
+            print("--> It's a tie! <--")
+
+        play_again = input("\nDo you want to play again? (Y/N) ").lower()
+        if play_again == "y" or play_again == "yes":
+            self.__init__()
+        else:
+            print("Thank you for playing!")
 
 
 # GAME START
