@@ -40,6 +40,7 @@ class Player:
 
     def __init__(self):
         self.name = input("What is your name? ")
+        print()
         self.hand = []
 
     def __str__(self):
@@ -88,6 +89,18 @@ class Dealer(Player):
     def __str__(self):
         return f"{self.name} is the dealer"
 
+    def view_cards(self, hide_second_card=True):
+        """view the cards in hand
+        """
+        print(f"{self.name}'s hand:")
+        # only show the first card
+        print(self.hand[0])
+        if hide_second_card:
+            print("< hidden card >")
+        else:
+            for card in self.hand[1:]:
+                print(card)
+
 
 class Game():
     """main flow of the game
@@ -111,9 +124,12 @@ class Game():
                 self.player.view_cards()
                 self.player.view_hand_value()
                 hand_value = self.player.get_hand_value()
-                if hand_value > 21:
+                if hand_value == 21:
+                    self.dealer_turn()
+                    break
+                elif hand_value > 21:
                     print(
-                        f"--> {self.player.name} has busted! Dealer wins! <--")
+                        f"--> {self.player.name} has busted! <--")
                     self.end_game()
                     break
             elif choice == "stand":
@@ -126,11 +142,10 @@ class Game():
     def dealer_turn(self):
         """dealer follows house rules to draw cards
         """
-        print("\nDealer's turn...")
-        # self.dealer.view_cards()
+        print("\nDealer's turn...\n")
         while self.dealer.get_hand_value() < 17:
             self.give_card(self.dealer)
-        self.dealer.view_cards()
+        self.dealer.view_cards(hide_second_card=False)
         self.dealer.view_hand_value()
         self.end_game()
 
@@ -158,9 +173,8 @@ class Game():
         self.give_card(self.dealer)
 
         # print dealer info ---
-        print("Dealer's hand:")
-        self.dealer.view_cards()
-        self.dealer.view_hand_value()
+        # hide second card ---
+        self.dealer.view_cards(True)
         print()
 
     def end_game(self):
@@ -170,15 +184,17 @@ class Game():
         dealer_final_score = self.dealer.get_hand_value()
 
         if player_final_score > 21:
-            print("--> Dealer wins! <--")
+            print(" * * * Dealer wins! * * * ")
         elif dealer_final_score > 21:
-            print(f"--> {self.player.name} wins!")
+            print(
+                f" * * * {self.player.name} wins! * * * ")
         elif player_final_score > dealer_final_score:
-            print(f"--> {self.player.name} wins!")
+            print(
+                f" * * * {self.player.name} wins! * * * ")
         elif player_final_score < dealer_final_score:
-            print("--> Dealer wins! <--")
+            print(" * * * Dealer wins! * * * ")
         else:
-            print("--> It's a tie! <--")
+            print(" * * * It's a tie! * * * ")
 
         play_again = input("\nDo you want to play again? (Y/N) ").lower()
         if play_again == "y" or play_again == "yes":
