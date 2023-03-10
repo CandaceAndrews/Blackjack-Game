@@ -13,7 +13,12 @@ class Card:
         self.rank = rank
 
     def __str__(self):
-        return f"{self.rank} of {self.suit}"
+        """return text picture of the card
+        """
+        rank = self.rank
+        suit = self.suit
+
+        return f"┌─────┐ \n|{rank:<2}   | \n| {suit}   |\n|  {rank:>2} | \n└─────┘ "
 
 
 class Deck:
@@ -92,14 +97,14 @@ class Dealer(Player):
     def view_cards(self, hide_second_card=True):
         """view the cards in hand
         """
+
         print(f"{self.name}'s hand:")
-        # only show the first card
-        print(self.hand[0])
-        if hide_second_card:
-            print("< hidden card >")
-        else:
-            for card in self.hand[1:]:
-                print(card)
+        # hide 2nd card on first turn
+        for index, value in enumerate(self.hand):
+            if index == 1 and hide_second_card is True:
+                print("┌─────┐\n|░░░░░|\n|░░░░░|\n|░░░░░|\n└─────┘")
+            else:
+                print(value)
 
 
 class Game():
@@ -139,22 +144,6 @@ class Game():
                 print("--> Invalid input. Please enter 'hit' or 'stand' <--")
                 continue
 
-    def dealer_turn(self):
-        """dealer follows house rules to draw cards
-        """
-        print("\nDealer's turn...\n")
-        while self.dealer.get_hand_value() < 17:
-            self.give_card(self.dealer)
-        self.dealer.view_cards(hide_second_card=False)
-        self.dealer.view_hand_value()
-        self.end_game()
-
-    def give_card(self, person_playing):
-        """give one card
-        """
-        card = self.deck.cards.pop()
-        person_playing.hand.append(card)
-
     def deal(self):
         """give out cards and print game info
         """
@@ -176,6 +165,22 @@ class Game():
         # hide second card ---
         self.dealer.view_cards(hide_second_card=True)
         print()
+
+    def dealer_turn(self):
+        """dealer follows house rules to draw cards
+        """
+        print("\nDealer's turn...\n")
+        while self.dealer.get_hand_value() < 17:
+            self.give_card(self.dealer)
+        self.dealer.view_cards(hide_second_card=False)
+        self.dealer.view_hand_value()
+        self.end_game()
+
+    def give_card(self, person_playing):
+        """give one card
+        """
+        card = self.deck.cards.pop()
+        person_playing.hand.append(card)
 
     def end_game(self):
         """determine the winner and end the game
